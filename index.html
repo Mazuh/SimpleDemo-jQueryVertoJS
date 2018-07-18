@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Vertinho</title>
+  <meta name="description" content="Simple demonstration of the jQuery Verto JS free source lib, making a video conference through a FreeSWITCH server.">
+  <meta name="author" content="Mazuh">
+  <style>
+    #main {
+      display: flex;
+      margin-bottom: 100px;
+    }
+
+    .dashboard {
+      margin-right: 100px;
+    }
+
+    .conference > * {
+      margin: auto;
+    }
+
+    #main-footer {
+      margin-top: 50px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="main">
+    <!-- left side -->
+    <div class="dashboard">
+      <h1>Vertinho, <small>the demo</small>.</h1>
+      <form id="create-verto-form" onsubmit="try { onCreateVertoFormSubmit(this); } catch(e) { console.error('verto config form error', e) } finally { return false; }">
+        <span>Server authentication:</span>
+        <br/>
+        <label for="login">Login:</label>
+        <input type="text" id="login" name="login" placeholder="user@domain" required/>
+        <br/>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="password" required/>
+        <br/>
+        <label for="socket-url">Socket URL:</label>
+        <input type="text" id="socket-url" name="socketUrl" placeholder="wss://your.server" required/>
+        <br/>
+        <button type="submit" id="create-verto-btn">Create the Verto instance</button>
+      </form>
+      <form id="call-form" onsubmit="try { onDialerFormSubmit(this); } catch(e) { console.error('dialer form error', e) } finally { return false; }">
+        <span>Make the call:</span><br/>
+        <input type="search" id="extension" name="extension" placeholder="Type an extension..."/>
+        <br/>
+        <button type="submit" id="call-btn">Call</button>
+        <button type="button" id="hangup-btn" onclick="onHangupClick(this)">Hangup</button>
+        <br/>
+        <button type="button" id="destroy-verto-btn" onclick="vertoInstance = null;">Destroy the Verto instance</button>
+      </form>
+    </div>
+    <!-- right side -->
+    <div class="conference">
+      <video id="local-video-from-remote" autoplay="autoplay" width="250px"></video>
+      <video id="remote-video" autoplay="autoplay" width="800px"></video>
+    </div>
+  </div>
+
+  <aside>
+    Basically, there isn't any Verto error handling implemented, so pay attention to the browser's console.
+  </aside>
+
+  <footer id="main-footer">
+    (c) mazuh <a target="_blank" href="https://github.com/Mazuh/SimpleDemo-jQueryVertoJS">https://github.com/Mazuh/SimpleDemo-jQueryVertoJS</a>
+  </footer>
+
+  <!-- Verto dependencies -->
+  <script src="./jquery/jquery-2.1.1.min.js"></script>
+  <script src="./jquery/jquery.json-2.4.min.js"></script>
+  <!-- Verto library -->
+  <script src="./verto/jquery.verto.js"></script>
+  <script src="./verto/jquery.FSRTC.js"></script>
+  <script src="./verto/jquery.jsonrpcclient.js"></script>
+
+  <!-- Aesthetic interface behaviours -->
+  <script>
+    function onCreateVertoFormSubmit(form) {
+      createGlobalVertoInstance(form.login.value, form.password.value, form.socketUrl.value);
+    }
+
+    function onDialerFormSubmit(form) {
+      makeCall(form.extension.value);
+    }
+
+    function onHangupClick() {
+      if (vertoInstance !== undefined) {
+        vertoInstance.hangup();
+      }
+    }
+
+    setInterval(function() {
+      if (vertoInstance) {
+        document.getElementById('create-verto-form').style.display = 'none';
+        document.getElementById('call-form').style.display = '';
+      } else {
+        document.getElementById('create-verto-form').style.display = '';
+        document.getElementById('call-form').style.display = 'none';
+      }
+
+      if (vertoInstance && Object.keys(vertoInstance.dialogs).length) {
+        document.getElementById('extension').disabled = true;
+        document.getElementById('call-btn').disabled = true;
+        document.getElementById('hangup-btn').disabled = false;
+        document.getElementById('destroy-verto-btn').disabled = true;
+      } else {
+        document.getElementById('extension').disabled = false;
+        document.getElementById('call-btn').disabled = false;
+        document.getElementById('hangup-btn').disabled = true;
+        document.getElementById('destroy-verto-btn').disabled = false;
+      }
+    }, 150);
+  </script>
+
+  <!-- Bootstraping my own Verto instance. -->
+  <script>
+    var vertoInstance, vertoCallbacks, currentCall;
+
+    function onWSLogin(verto, success) {
+      console.log('onWSLogin', success);
+    };
+
+    function onWSClose(verto, success) {
+      console.log('onWSClose', success);
+    };
+
+    vertoCallbacks = {
+      onWSLogin: onWSLogin,
+      onWSClose: onWSClose
+    };
+
+    function createGlobalVertoInstance(login, password, socketUrl) {
+      function bootstrap(status) {
+        vertoInstance = new jQuery.verto({
+          login: login,
+          passwd: password,
+          socketUrl: socketUrl,
+          deviceParams: {
+            useMic: 'any',
+            useSpeak: 'any',
+            useCamera: 'any',
+          },
+          tag: "remote-video",
+          localTag: "local-video-from-remote",
+        }, vertoCallbacks);
+      };
+
+      $.verto.init({}, bootstrap);
+    }
+
+    function makeCall(extension) {
+      currentCall = vertoInstance.newCall({
+        destination_number: extension,
+        caller_id_name: 'Test Guy',
+        caller_id_number: '1008',
+        outgoingBandwidth: 'default',
+        incomingBandwidth: 'default',
+        useStereo: true,
+        dedEnc: false,
+        useVideo: true,
+        userVariables: {
+          email: 'test@test.com'
+        },
+      });
+    };
+  </script>
+</body>
+</html>
