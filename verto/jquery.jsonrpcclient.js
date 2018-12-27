@@ -322,8 +322,8 @@
                         self.options.onWSClose(self);
                     }
 
-                    if (self.ws_cnt > 10) {
-                      self.options.socketUrl = self.options.socketFallbackUrl;
+                    if (self.ws_cnt > 10 && self.options.wsFallbackURL) {
+                      self.options.socketUrl = self.options.wsFallbackURL;
                     }
 
                     console.error("Websocket Lost " + self.ws_cnt + " sleep: " + self.ws_sleep + "msec");
@@ -429,8 +429,14 @@
 		var down_kps = (((this.speedBytes * 8) / (this.down_dur / 1000)) / 1024).toFixed(0);
 		
 		console.info("Speed Test: Up: " + up_kps + " Down: " + down_kps);
-		this.speedCB(event, { upDur: this.up_dur, downDur: this.down_dur, upKPS: up_kps, downKPS: down_kps });
+		var cb = this.speedCB;
 		this.speedCB = null;
+		cb(event, {
+			upDur: this.up_dur,
+			downDur: this.down_dur,
+			upKPS: up_kps,
+			downKPS: down_kps
+		});
 	    }
 	    
 	    return;
