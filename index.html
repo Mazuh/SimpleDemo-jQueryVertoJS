@@ -37,19 +37,19 @@
         <span>Server authentication:</span>
         <br/>
         <label for="login">Login:</label>
-        <input type="text" id="login" name="login" placeholder="user@domain" required/>
+        <input type="text" id="login" name="login" placeholder="user@domain" value="1008@cantina.freeswitch.org" required/>
         <br/>
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" placeholder="password" required/>
+        <input type="password" id="password" name="password" placeholder="password" value="1234" required/>
         <br/>
         <label for="socket-url">Socket URL:</label>
-        <input type="text" id="socket-url" name="socketUrl" placeholder="wss://your.server" required/>
+        <input type="text" id="socket-url" name="socketUrl" placeholder="wss://your.server" value="wss://cantina.freeswitch.org/wss2" required/>
         <br/>
         <button type="submit" id="create-verto-btn">Create the Verto instance</button>
       </form>
       <form id="call-form" onsubmit="try { onDialerFormSubmit(this); } catch(e) { console.error('dialer form error', e) } finally { return false; }">
         <span>Make the call:</span><br/>
-        <input type="search" id="extension" name="extension" placeholder="Type an extension..."/>
+        <input type="search" id="extension" name="extension" placeholder="Type an extension..." value="3590" required/>
         <br/>
         <button type="submit" id="call-btn">Call</button>
         <button type="button" id="hangup-btn" onclick="onHangupClick(this)">Hangup</button>
@@ -73,6 +73,7 @@
   </footer>
 
   <!-- Verto dependencies -->
+  <script src="./verto/vendor/adapter-latest.js"></script>
   <script src="./jquery/jquery-2.1.1.min.js"></script>
   <script src="./jquery/jquery.json-2.4.min.js"></script>
   <!-- Verto library -->
