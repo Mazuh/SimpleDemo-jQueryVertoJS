@@ -1,0 +1,25 @@
+{
+  "name": "simpledemo-jqueryvertojs",
+  "version": "0.0.0",
+  "description": "Simple demonstration of the jQuery Verto JS free source lib, making a video conference through a FreeSWITCH server.",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --https --mode=development",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mazuh/SimpleDemo-jQueryVertoJS.git"
+  },
+  "author": "Mazuh",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/Mazuh/SimpleDemo-jQueryVertoJS/issues"
+  },
+  "homepage": "https://github.com/Mazuh/SimpleDemo-jQueryVertoJS#readme",
+  "devDependencies": {
+    "webpack": "^4.28.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.14"
+  }
+}

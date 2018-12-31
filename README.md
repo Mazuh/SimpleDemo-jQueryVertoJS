@@ -5,18 +5,15 @@ Simple demonstration of the jQuery Verto JS free source lib, making a video conf
 
 ### Setting up
 
-Easier way for a Unix-based system.
-Assuming that you have a `python` 2.7.X, run this
-command line inside the repository directory:
+Having an updated Node there, run:
 
-```sh
-python -m SimpleHTTPServer
+```
+npm install # once
+npm start
 ```
 
 Use your web browser to access the address and port told by
-your `stdout`.
-
-Without a server exposing those files, you'll have trouble
+your `stdout`. Without a HTTPS server exposing those files, you'll have trouble
 with user media permissions.
 
 ### Legal
