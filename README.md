@@ -3,7 +3,11 @@
 
 Simple demonstration of the jQuery Verto JS free source lib, making a video conference through a FreeSWITCH server.
 
-### Setting up
+> Test it for yourself: https://mazuh.github.io/SimpleDemo-jQueryVertoJS/
+
+I'm usually using it for testing and debugging, since it's so simple.
+
+### Setting up locally
 
 Easier way for a Unix-based system.
 Assuming that you have a `python` 2.7.X, run this
